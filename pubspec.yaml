@@ -1,0 +1,27 @@
+name: sleep_sync
+description: Server/Client application to sync sleep.
+publish_to: 'none'
+version: 1.0.0+1
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  flutter_modular: ^4.2.0
+  flutter_bloc: ^8.0.0
+  equatable: ^2.0.3
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
+  formz: ^0.4.1
+  shelf: ^1.2.0
+  r_get_ip: ^0.1.1
+  dio: ^4.0.4
+  wakelock: ^0.5.6
+  desktop_window: ^0.4.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+flutter:
+  uses-material-design: true

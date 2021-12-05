@@ -1,0 +1,1 @@
+enum ModeStatus { server, client }
