@@ -1,4 +1,4 @@
-const String HiveBox = "sleep_sync";
+const String HiveBox = "fosl";
 const String HiveBoxMode = "mode";
 const String HiveBoxHostAddress = "host_address";
 const String HiveBoxServerPort = "server_port";

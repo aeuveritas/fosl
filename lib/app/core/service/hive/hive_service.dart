@@ -4,7 +4,7 @@ import 'package:sleep_sync/app/feature/dashboard/dashboard.dart';
 
 class HiveService {
   HiveService() {
-    box = Hive.box("owl");
+    box = Hive.box(HiveBox);
   }
 
   late Box box;
