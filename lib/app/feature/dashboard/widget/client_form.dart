@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sleep_sync/app/core/const/config.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:sleep_sync/app/feature/dashboard/bloc/controller/controller_bloc.dart';
 import 'package:sleep_sync/app/feature/dashboard/model/model.dart';
 import 'package:sleep_sync/app/feature/dashboard/widget/widget.dart';
 
@@ -8,83 +10,35 @@ class ClientForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
+    return BlocBuilder<ControllerBloc, ControllerState>(
+      bloc: Modular.get<ControllerBloc>(),
+      builder: (context, state) {
+        bool readOnly = false;
+        if (state.status == ActivateStatus.active) {
+          readOnly = true;
+        }
+        return Column(
           children: [
-            Flexible(
-              flex: 1,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints.tightFor(
-                    width: 120,
-                  ),
-                  child: const Text(
-                    "Host Address",
-                    style: defaultTextStyle,
-                  ),
-                ),
+            TextFieldTile(
+              title: "Host Address",
+              child: HostAddressInput(readOnly: readOnly),
+            ),
+            const SizedBox(height: 16.0),
+            TextFieldTile(
+              title: "Port (30000 ~ 40000)",
+              child: PortInput(
+                mode: ModeStatus.client,
+                readOnly: readOnly,
               ),
             ),
-            const Flexible(
-              flex: 2,
-              child: Center(
-                child: HostAddressInput(),
-              ),
+            const SizedBox(height: 16.0),
+            TextFieldTile(
+              title: "Sync Interval (min)",
+              child: SyncIntervalInput(readOnly: readOnly),
             ),
           ],
-        ),
-        const SizedBox(height: 16.0),
-        Row(
-          children: [
-            Flexible(
-              flex: 1,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints.tightFor(
-                    width: 120,
-                  ),
-                  child: const Text(
-                    "Port (30000 ~ 40000)",
-                    style: defaultTextStyle,
-                  ),
-                ),
-              ),
-            ),
-            const Flexible(
-              flex: 2,
-              child: Center(
-                child: PortInput(mode: ModeStatus.client),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16.0),
-        Row(
-          children: [
-            Flexible(
-              flex: 1,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints.tightFor(
-                    width: 120,
-                  ),
-                  child: const Text(
-                    "Sync Interval (min)",
-                    style: defaultTextStyle,
-                  ),
-                ),
-              ),
-            ),
-            const Flexible(
-              flex: 2,
-              child: Center(
-                child: SyncIntervalInput(),
-              ),
-            ),
-          ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

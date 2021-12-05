@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:sleep_sync/app/core/const/config.dart';
 import 'package:sleep_sync/app/feature/dashboard/bloc/client_input/client_input_bloc.dart';
+import 'package:sleep_sync/app/feature/dashboard/widget/widget.dart';
 
 class SyncIntervalInput extends StatelessWidget {
-  const SyncIntervalInput({Key? key}) : super(key: key);
+  const SyncIntervalInput({
+    Key? key,
+    this.readOnly = false,
+  }) : super(key: key);
+
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -14,23 +19,15 @@ class SyncIntervalInput extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.syncInterval != current.syncInterval,
       builder: (context, state) {
-        return TextFormField(
-          initialValue: state.syncInterval.value,
+        return ModifiableTextField(
           key: const Key("clientForm_syncIntervalInput_textField"),
-          style: defaultTextStyle,
-          textAlign: TextAlign.center,
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(8.0),
-              ),
-            ),
-            errorText: state.syncInterval.invalid
-                ? state.syncInterval.errorMessage
-                : null,
-          ),
+          initialValue: state.syncInterval.value,
           onChanged: (syncInterval) => Modular.get<ClientInputBloc>()
               .add(SyncIntervalChanged(syncInterval)),
+          errorText: state.syncInterval.invalid
+              ? state.syncInterval.errorMessage
+              : null,
+          readOnly: readOnly,
         );
       },
     );
