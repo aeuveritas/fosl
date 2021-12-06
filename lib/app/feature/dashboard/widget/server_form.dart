@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sleep_sync/app/feature/dashboard/bloc/controller/controller_bloc.dart';
+import 'package:sleep_sync/app/feature/dashboard/widget/on_bloc/server_input/server_input_controller_updater.dart';
 import 'package:sleep_sync/app/feature/dashboard/widget/widget.dart';
 
 import 'on_bloc/ip/ip_field.dart';
@@ -33,6 +34,7 @@ class ServerForm extends StatelessWidget {
               readOnly: readOnly,
             ),
           ),
+          const ServerInputControllerUpdater(),
         ],
       ),
     );

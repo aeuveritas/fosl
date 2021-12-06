@@ -35,6 +35,7 @@ class ClientForm extends StatelessWidget {
             title: "Sync Interval (min)",
             child: SyncIntervalInput(readOnly: readOnly),
           ),
+          const ClientInputControllerUpdater(),
         ],
       ),
     );
