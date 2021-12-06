@@ -7,7 +7,7 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const windowSize = Size(550, 800);
+    const windowSize = Size(550, 650);
     DesktopWindow.setWindowSize(windowSize);
     DesktopWindow.setMinWindowSize(windowSize);
     DesktopWindow.setMaxWindowSize(windowSize);
