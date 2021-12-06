@@ -1,72 +1,45 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:formz/formz.dart';
-import 'package:sleep_sync/app/core/service/hive/hive_service.dart';
-import 'package:sleep_sync/app/feature/dashboard/bloc/controller/controller_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:sleep_sync/app/core/const/key.dart';
 import 'package:sleep_sync/app/feature/dashboard/model/port.dart';
 
 part 'server_input_event.dart';
 part 'server_input_state.dart';
 
-class ServerInputBloc extends Bloc<ServerInputEvent, ServerInputState> {
+class ServerInputBloc extends Bloc<ServerInputEvent, ServerInputState>
+    with HydratedMixin {
   ServerInputBloc() : super(const ServerInputState()) {
-    on<ServerInputBlocInit>(_onServerInputBlocInit);
     on<ServerPortChanged>(_onServerPortChanged);
-
-    add(ServerInputBlocInit());
   }
 
-  void _onServerInputBlocInit(
-      ServerInputBlocInit event, Emitter<ServerInputState> emit) {
-    final newStatus = Formz.validate([state.port]);
+  @override
+  ServerInputState? fromJson(Map<String, dynamic> json) {
+    return ServerInputState(
+      status: FormzStatus.values[(json[HiveBoxServerInfoStatus] ?? 0)],
+      port: Port.dirty(json[HiveBoxServerPort] ?? "30000"),
+    );
+  }
 
-    final hiveService = Modular.get<HiveService>();
-    emit(state.copyWith(
-      port: Port.dirty(hiveService.serverPort),
-      status: Formz.validate([state.port]),
-    ));
-
-    final controllerBloc = Modular.get<ControllerBloc>();
-    final isValid = newStatus == FormzStatus.valid;
-    if (isValid) {
-      controllerBloc.add(ValidateInput(
-        serverPort: state.port.value,
-        hostAddress: "",
-        clientPort: "",
-        syncInterval: "",
-        isValid: isValid,
-      ));
-    } else {
-      controllerBloc.add(ValidateInput(
-        isValid: isValid,
-      ));
+  @override
+  Map<String, dynamic>? toJson(ServerInputState state) {
+    if (!state.status.isValid) {
+      return null;
     }
+
+    return {
+      HiveBoxServerInfoStatus: state.status.index,
+      HiveBoxServerPort: state.port.value,
+    };
   }
 
   void _onServerPortChanged(
       ServerPortChanged event, Emitter<ServerInputState> emit) {
     final port = Port.dirty(event.port);
-    final newStatus = Formz.validate([port]);
     emit(state.copyWith(
       port: port,
       status: Formz.validate([port]),
     ));
-
-    final controllerBloc = Modular.get<ControllerBloc>();
-    final isValid = newStatus == FormzStatus.valid;
-    if (isValid) {
-      controllerBloc.add(ValidateInput(
-        serverPort: port.value,
-        hostAddress: "",
-        clientPort: "",
-        syncInterval: "",
-        isValid: isValid,
-      ));
-    } else {
-      controllerBloc.add(ValidateInput(
-        isValid: isValid,
-      ));
-    }
   }
 }

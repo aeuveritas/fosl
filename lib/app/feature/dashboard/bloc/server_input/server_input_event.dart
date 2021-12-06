@@ -12,8 +12,3 @@ class ServerPortChanged extends ServerInputEvent {
   @override
   List<Object?> get props => [port];
 }
-
-class ServerInputBlocInit extends ServerInputEvent {
-  @override
-  List<Object?> get props => [];
-}

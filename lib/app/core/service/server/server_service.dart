@@ -22,7 +22,6 @@ class ServerService {
   }
 
   static Future<void> runServer(List<Object> arguments) async {
-    final SendPort sendPort = arguments[0] as SendPort;
     final String port = arguments[1] as String;
 
     final portInt = int.parse(port);

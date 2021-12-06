@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sleep_sync/app/core/const/config.dart';
 
-class TextFieldTile extends StatelessWidget {
-  const TextFieldTile({
+class ContentTile extends StatelessWidget {
+  const ContentTile({
     Key? key,
     required this.title,
     required this.child,

@@ -1,70 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:sleep_sync/app/core/const/config.dart';
 import 'package:sleep_sync/app/feature/dashboard/bloc/controller/controller_bloc.dart';
-import 'package:sleep_sync/app/feature/dashboard/bloc/ip/ip_bloc.dart';
-import 'package:sleep_sync/app/feature/dashboard/model/model.dart';
 import 'package:sleep_sync/app/feature/dashboard/widget/widget.dart';
 
+import 'on_bloc/ip/ip_field.dart';
+import 'on_bloc/server_input/server_input.dart';
+
 class ServerForm extends StatelessWidget {
-  const ServerForm({Key? key}) : super(key: key);
+  const ServerForm({Key? key, required this.activeStatus}) : super(key: key);
+
+  final ActivateStatus activeStatus;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ControllerBloc, ControllerState>(
-      bloc: Modular.get<ControllerBloc>(),
-      builder: (context, state) {
-        bool readOnly = false;
-        if (state.status == ActivateStatus.active) {
-          readOnly = true;
-        }
+    bool readOnly = false;
+    if (activeStatus == ActivateStatus.active) {
+      readOnly = true;
+    }
 
-        return Column(
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints.tightFor(
-                        width: 120,
-                      ),
-                      child: const Text(
-                        "IP Address",
-                        style: defaultTextStyle,
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Center(
-                    child: BlocBuilder<IPBloc, IPState>(
-                      bloc: Modular.get<IPBloc>(),
-                      builder: (context, state) {
-                        return Text(
-                          state.ip,
-                          style: defaultTextStyle,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
+    return Material(
+      child: Column(
+        children: [
+          const ContentTile(
+            title: "IP Address",
+            child: Center(
+              child: IPField(),
             ),
-            const SizedBox(height: 16.0),
-            TextFieldTile(
-              title: "Port (30000 ~ 40000)",
-              child: PortInput(
-                mode: ModeStatus.server,
-                readOnly: readOnly,
-              ),
+          ),
+          const SizedBox(height: 16.0),
+          ContentTile(
+            title: "Port (30000 ~ 40000)",
+            child: ServerPortInput(
+              readOnly: readOnly,
             ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }

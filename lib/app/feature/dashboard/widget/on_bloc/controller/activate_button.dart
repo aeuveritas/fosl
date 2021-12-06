@@ -9,13 +9,13 @@ class ActivateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints:
-          const BoxConstraints.tightFor(width: double.infinity, height: 64.0),
-      child: BlocBuilder<ControllerBloc, ControllerState>(
-        bloc: Modular.get<ControllerBloc>(),
-        builder: (context, state) {
-          return ElevatedButton(
+    return BlocBuilder<ControllerBloc, ControllerState>(
+      bloc: Modular.get<ControllerBloc>(),
+      builder: (context, state) {
+        return ConstrainedBox(
+          constraints: const BoxConstraints.tightFor(
+              width: double.infinity, height: 64.0),
+          child: ElevatedButton(
             style: ButtonStyle(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
@@ -40,9 +40,9 @@ class ActivateButton extends StatelessWidget {
               state.status == ActivateStatus.active ? "Deactivate" : "Activate",
               style: defaultTextStyle,
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

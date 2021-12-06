@@ -30,8 +30,3 @@ class SyncIntervalChanged extends ClientInputEvent {
   @override
   List<Object?> get props => [syncInterval];
 }
-
-class ClientInputBlocInit extends ClientInputEvent {
-  @override
-  List<Object?> get props => [];
-}
