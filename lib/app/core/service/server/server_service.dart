@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:shelf/shelf.dart';
@@ -26,13 +27,17 @@ class ServerService {
 
     final portInt = int.parse(port);
 
-    var handler = const Pipeline().addHandler(_echoRequest);
+    final handler = const Pipeline().addHandler(_echoRequest);
 
-    var server = await shelf_io.serve(handler, 'localhost', portInt);
+    final host = InternetAddress.anyIPv4;
+    final server = await shelf_io.serve(handler, host, portInt);
     server.autoCompress = true;
 
     print('Serving at http://${server.address.host}:${server.port}');
   }
 
-  static Response _echoRequest(Request request) => Response.ok(null);
+  static Response _echoRequest(Request request) {
+    print("request: ${request.url}");
+    return Response.ok(null);
+  }
 }
